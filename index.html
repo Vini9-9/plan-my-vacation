@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Plan my vacation</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+</head>
+
+<body>
+    <div class="container">
+        <h1>Plan my vacation</h1>
+        
+        <div>
+            <label>Quantidade de dias:</label>
+            <input type="number" name="" default="5" min="5" max="30" id="qtd-dias">
+        </div>
+        
+        <div class="datas">
+            <div>
+                <label>Data inicio:</label>
+                <input type="date" name="" id="data-inicio">
+            </div>
+            <div>
+                <label>Data Fim:</label>
+                <input type="date" name="" id="data-fim">
+            </div>
+        </div>
+
+        <div class="localidade">
+            <label>Estado:</label>
+            <select name="estado" id="estado-nome"></select>
+            <label>Cidade:</label>
+            <select name="cidade" id="cidade-nome"></select>
+        </div>
+        
+        <input type="submit" value="Enviar">
+
+    </div>
+
+</body>
+<script src='main.js'></script>
+</html>
