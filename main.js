@@ -28,7 +28,7 @@ function listStates(json) {
 
     for (var i = 0; i < json.length; i++) {
 
-        options += `<option data-id="${json[i].id}" value="${json[i].nome}" > ${json[i].nome} </option>`;
+        options += `<option data-id="${json[i].id}" value="${json[i].sigla}" > ${json[i].nome} </option>`;
 
     }
 
@@ -61,3 +61,33 @@ function generateOptionCities(dadosCidades) {
     $("select[name='cidade']").html(options);
 
 };
+
+function enviarDados() {
+
+    const qtdDias = $("#qtd-dias").val()
+    const dataInicio = $("#data-inicio").val()
+    const dataFim = $("#data-fim").val()
+    const estado = $("#estado-sigla").val()
+    const cidade = $("#cidade-nome").val()
+
+    const dadosJson =  {
+        "qtdDias": qtdDias,
+        "dataInicio": dataInicio,
+        "dataFim": dataFim,
+        "estado" : estado,
+        "cidade": cidade
+    }
+
+    console.log(dadosJson)
+
+    const xhr = new XMLHttpRequest()
+
+    xhr.open("POST", "http://localhost:3000/")
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.send(JSON.stringify(dadosJson))
+    xhr.onload = function () {
+        console.log("deu bom")
+        console.log(this.responseText)
+    }
+
+}
