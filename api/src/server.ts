@@ -35,7 +35,7 @@ app.post('/', async (req, res) =>{
     
     const feriados = filtrarFeriados(dataInicio, dataFim, datasFeriados)
     
-    /* gerarGeriadoMunicipal(cidade) */
+    /* gerarFeriadoMunicipal(cidade) */
     
     return res.status(200).json({
         "message": "OK",
@@ -81,7 +81,7 @@ function filtrarFeriados(dataInicio:string, dataFim:string, feriados:Array<strin
         var mesFeriado = parseInt(el.split('-')[1])
         var diaFeriado = parseInt(el.split('-')[2])
 
-        var mesmoMesDiaMenor = parseInt(dataInicioArray[1]) == mesFeriado && parseInt(dataInicioArray[2]) > diaFeriado
+        var mesmoMesDiaMenor = parseInt(dataFimArray[1]) == mesFeriado && parseInt(dataFimArray[2]) > diaFeriado
 
         return parseInt(dataFimArray[1]) > mesFeriado || mesmoMesDiaMenor
     })
