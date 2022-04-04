@@ -50,19 +50,17 @@ async function gerarListaFeriado(anos: Array<string>, estado: string) {
     const apiFeriados = `https://api.invertexto.com/v1/holidays/${anos[0]}?token=${token}&state=${estado}`
     const response = await fetch(apiFeriados)
     var dado = await response.json();
-    
 
     if(anos[0] != anos[1]) {
         const apiFeriadosAnoFim = `https://api.invertexto.com/v1/holidays/${anos[1]}?token=${token}&state=${estado}`
         const responseAnoFIm = await fetch(apiFeriadosAnoFim)
         var dadoAnoFim = await responseAnoFIm.json();
         dado = dado.concat(dadoAnoFim);
-        console.log(dado)
     } 
-    
-    return dado
+
+    var datas = dado.map((el: { date: any }) => el.date)
+
+    return datas
 }
 
-function filtrarFeriados(dataInicio:string, dataFim:string, feriados:JSON) {
-    
-}
+
