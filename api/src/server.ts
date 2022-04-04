@@ -31,9 +31,10 @@ app.post('/', async (req, res) =>{
     var anoFim = dataFim.split('-')[0]
     var anos = [anoInicio, anoFim]
 
-    const feriados = await gerarListaFeriado(anos, estado)
-    //filtrarFeriados(dataInicio, dataFim, feriados)
-    //gerarListaFeriado(dataFim, estado)
+    const datasFeriados = await gerarListaFeriado(anos, estado)
+    
+    const feriados = filtrarFeriados(dataInicio, dataFim, datasFeriados)
+    
     /* gerarGeriadoMunicipal(cidade) */
     
     return res.status(200).json({
@@ -63,4 +64,27 @@ async function gerarListaFeriado(anos: Array<string>, estado: string) {
     return datas
 }
 
+function filtrarFeriados(dataInicio:string, dataFim:string, feriados:Array<string>) {
+    var dataInicioArray = dataInicio.split('-')
+    var dataFimArray = dataFim.split('-')
 
+    var feriadosFiltradosInicio = feriados.filter((el) => {
+        var mesFeriado = parseInt(el.split('-')[1])
+        var diaFeriado = parseInt(el.split('-')[2])
+
+        var mesmoMesDiaMaior = parseInt(dataInicioArray[1]) == mesFeriado && parseInt(dataInicioArray[2]) < diaFeriado
+
+        return parseInt(dataInicioArray[1]) < mesFeriado || mesmoMesDiaMaior
+    })
+
+    var feriadosFiltradosFim = feriadosFiltradosInicio.filter((el) => {
+        var mesFeriado = parseInt(el.split('-')[1])
+        var diaFeriado = parseInt(el.split('-')[2])
+
+        var mesmoMesDiaMenor = parseInt(dataInicioArray[1]) == mesFeriado && parseInt(dataInicioArray[2]) > diaFeriado
+
+        return parseInt(dataFimArray[1]) > mesFeriado || mesmoMesDiaMenor
+    })
+
+    return feriadosFiltradosFim
+}
