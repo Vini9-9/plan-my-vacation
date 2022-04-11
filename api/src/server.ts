@@ -1,6 +1,8 @@
 import express from "express"
 import fetch from 'node-fetch'
 import cors from "cors"
+import moment from 'moment'
+import TOKEN from './token'
 
 const app = express()
 
@@ -20,12 +22,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.listen(3000, () => {console.log("Server is running")})
+app.listen(3000, () => {
+    console.log("Server is running")
+})
 
-app.post('/', async (req, res) =>{
+app.get('/', async (req, res) =>{
     const {qtdDias, estado, cidade, dataInicio, dataFim} = req.body
-    console.log(req.body)
-
 
     var anoInicio = dataInicio.split('-')[0]
     var anoFim = dataFim.split('-')[0]
@@ -34,26 +36,88 @@ app.post('/', async (req, res) =>{
     const datasFeriados = await gerarListaFeriado(anos, estado)
     
     const feriados = filtrarFeriados(dataInicio, dataFim, datasFeriados)
+
+    const periodoDiaSemana = filtrarDiaSemana(feriados) 
+
+    // console.log(periodoDiaSemana)
+
+    const periodosIdeais = calcularPerido(periodoDiaSemana, qtdDias) 
+
+    const periodosOrdenados = ordenarPeriodos(periodosIdeais)
+
+    //console.log(datasFeriados)
     
     /* gerarFeriadoMunicipal(cidade) */
     
     return res.status(200).json({
         "message": "OK",
-        "qtdDias": qtdDias,
-        "cidade": cidade,
-        "feriados": feriados
+        "feriados": feriados,
+        "periodosIdeias": periodosOrdenados
     })
 });
 
-async function gerarListaFeriado(anos: Array<string>, estado: string) {
-    const token = "649|xqNEJ3Gwo9t8GLyawN2MI2ANv5BxG0c0"
+function compararDiaSemana(a:any,b:any) {
+    if (a.diaSemana < b.diaSemana)
+       return -1;
+    if (a.diaSemana > b.diaSemana)
+      return 1;
+    return 0;
+  }
+
+function ordenarPeriodos(periodosIdeais:Array<Object>) {
+
+    return periodosIdeais.sort(compararDiaSemana);
     
-    const apiFeriados = `https://api.invertexto.com/v1/holidays/${anos[0]}?token=${token}&state=${estado}`
+}
+
+function calcularPerido(periodoDiaSemana:Array<Object>, qtdDias:Number) {
+    
+    var periodoIdeal:Array<Object> = [];
+
+    periodoDiaSemana.forEach((el) => {
+        var diaMoment = el.data;
+        //console.log(diaMoment)
+        var inicioFerias = diaMoment.subtract(qtdDias, 'days');
+        //console.log(inicioFerias)
+
+        let diaSemana = moment(inicioFerias).day();
+        if(diaSemana > 0 && diaSemana < 6){
+            let objDia = {diaInicio: inicioFerias, diaSemana: diaSemana};
+            periodoIdeal.push(objDia)
+        }
+
+    })
+
+    return periodoIdeal
+}
+
+function filtrarDiaSemana(feriados:Array<string>){
+
+    var periodo:Array<Object> = [];
+
+    feriados.forEach((el) => {
+        let data = el.split('-');
+
+        let diaMoment = moment().set({'year': +data[0], 'month': +data[1]-1, 'date': +data[2]});
+        let diaSemana = moment(diaMoment).day();
+        //console.log(el, diaSemana);
+        if(diaSemana > 0 && diaSemana < 6){
+            let objDia = {data: diaMoment, diaSemana:diaSemana};
+            periodo.push(objDia)
+        }
+    })
+
+    return periodo;
+}
+
+async function gerarListaFeriado(anos: Array<string>, estado: string) {
+    
+    const apiFeriados = `https://api.invertexto.com/v1/holidays/${anos[0]}?token=${TOKEN}&state=${estado}`
     const response = await fetch(apiFeriados)
     var dado = await response.json();
 
     if(anos[0] != anos[1]) {
-        const apiFeriadosAnoFim = `https://api.invertexto.com/v1/holidays/${anos[1]}?token=${token}&state=${estado}`
+        const apiFeriadosAnoFim = `https://api.invertexto.com/v1/holidays/${anos[1]}?token=${TOKEN}&state=${estado}`
         const responseAnoFIm = await fetch(apiFeriadosAnoFim)
         var dadoAnoFim = await responseAnoFIm.json();
         dado = dado.concat(dadoAnoFim);
@@ -61,7 +125,9 @@ async function gerarListaFeriado(anos: Array<string>, estado: string) {
 
     var datas = dado.map((el: { date: any }) => el.date)
 
+    console.log(dado)
     return datas
+    
 }
 
 function filtrarFeriados(dataInicio:string, dataFim:string, feriados:Array<string>) {

@@ -82,7 +82,7 @@ function enviarDados() {
 
     const xhr = new XMLHttpRequest()
 
-    xhr.open("POST", "http://localhost:3000/")
+    xhr.open("GET", "http://localhost:3000/")
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.send(JSON.stringify(dadosJson))
     xhr.onload = function () {
