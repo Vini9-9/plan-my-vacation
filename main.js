@@ -78,15 +78,15 @@ function enviarDados() {
         "cidade": cidade
     }
 
-    console.log(dadosJson)
+    dataJson = JSON.stringify(dadosJson)
+    console.log(dataJson)
 
     const xhr = new XMLHttpRequest()
 
-    xhr.open("GET", "http://localhost:3000/")
+    xhr.open("POST", "http://localhost:3000/feriados")
     xhr.setRequestHeader("Content-Type", "application/json")
-    xhr.send(JSON.stringify(dadosJson))
+    xhr.send(dataJson)
     xhr.onload = function () {
-        console.log("deu bom")
         console.log(this.responseText)
     }
 
