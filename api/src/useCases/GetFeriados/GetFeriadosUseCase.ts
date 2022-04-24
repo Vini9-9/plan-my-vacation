@@ -91,10 +91,10 @@ export class GetFeriadosUseCase {
                 let qtdDiasExtras = calcularQtdDias(el.data)
                 let totalDias = +qtdDias + +qtdDiasExtras;
                 var voltaFerias = diaMoment.add(totalDias, 'days');
-                let diaSemanaFim = moment(voltaFerias).day();
+                let diaSemanaFim = diaSemanaToText(moment(voltaFerias).day());
                 voltaFerias = voltaFerias.format('DD/MM/YYYY')
                 let objDia = {qtdDias: totalDias, feriado: el.feriado,
-                     diaInicio: inicioFerias, diaSemanaInicio: diaSemana,
+                     diaInicio: inicioFerias, diaSemanaInicio: diaSemanaToText(diaSemana),
                      diaFim: voltaFerias, diaSemanaFim};
                 periodoIdeal.push(objDia)
             }
@@ -127,5 +127,11 @@ function calcularQtdDias(diaFeriado: any) :Number{
     }
 
     return 1
+}
+
+function diaSemanaToText(diaSemana: number) :string{
+    const nomesDiasDaSemana = ['Domingo', 'Segunda',
+     'Terça','Quarta', 'Quinta', 'Sexta', 'Sábado']
+    return nomesDiasDaSemana[diaSemana]
 }
 
