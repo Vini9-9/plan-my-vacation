@@ -10,7 +10,7 @@ export class GetFeriadosController {
     async handle(request: Request, response: Response){
         
         const {qtdDias, estado, cidade, dataInicio, dataFim} = request.body
-        console.log('request.body', request.body)
+        // console.log('request.body', request.body)
 
         var anoInicio = dataInicio.split('-')[0]
         var anoFim = dataFim.split('-')[0]
@@ -18,11 +18,11 @@ export class GetFeriadosController {
 
         const getFeriadosUseCase = new GetFeriadosUseCase()
 
-        const datasFeriados = await getFeriadosUseCase.gerarListaFeriado(anos, estado)
+        const feriadosObj = await getFeriadosUseCase.gerarListaFeriado(anos, estado)
+        
+        const feriadosFiltrados = getFeriadosUseCase.filtrarFeriados(dataInicio, dataFim, feriadosObj)
 
-        const feriados = getFeriadosUseCase.filtrarFeriados(dataInicio, dataFim, datasFeriados)
-
-        const periodoDiaSemana = getFeriadosUseCase.filtrarDiaSemana(feriados) 
+        const periodoDiaSemana = getFeriadosUseCase.filtrarDiaSemana(feriadosFiltrados) 
 
         const periodosIdeais = getFeriadosUseCase.calcularPerido(periodoDiaSemana, qtdDias) 
 
@@ -30,7 +30,7 @@ export class GetFeriadosController {
 
         return response.status(200).json({
             "message": "OK",
-            "feriados": feriados,
+            "feriados": feriadosObj,
             "periodosIdeias": periodosOrdenados
         })
     }

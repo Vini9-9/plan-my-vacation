@@ -62,6 +62,32 @@ function generateOptionCities(dadosCidades) {
 
 };
 
+
+function generateSuggestedPeriods(resultJSON) {
+
+    var resultTable = '';
+
+    for (var i = 0; i < resultJSON.length; i++) {
+
+        let qtdDias = `<th scope="row"> ${resultJSON[i].qtdDias} </th>`;
+        let feriado = `<td> ${resultJSON[i].feriado} </td>`;
+        let diaInicio = `<td> ${resultJSON[i].diaInicio} (${resultJSON[i].diaSemanaInicio})</td>`;
+        let diaFim = `<td scope="row"> ${resultJSON[i].diaFim} (${resultJSON[i].diaSemanaFim})</td>`;
+        let tableRow =`
+        <tr> 
+            ${qtdDias}  
+            ${feriado}  
+            ${diaInicio}  
+            ${diaFim}  
+        </tr>`;
+
+        resultTable += tableRow;
+    }
+
+    $("#resultados").html(resultTable);
+
+};
+
 function enviarDados() {
 
     const qtdDias = $("#qtd-dias").val()
@@ -87,7 +113,10 @@ function enviarDados() {
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.send(dataJson)
     xhr.onload = function () {
-        console.log(this.responseText)
+        var resultJSON = JSON.parse(this.responseText)
+        console.log(resultJSON)
+        console.log(resultJSON.periodosIdeias)
+        generateSuggestedPeriods(resultJSON.periodosIdeias)
     }
 
 }

@@ -2,13 +2,18 @@ import TOKEN from '../../token'
 import fetch from 'node-fetch'
 import moment from 'moment'
 
+interface FeriadoDTO {
+    date: string;
+    feriado: string;
+}
+
 export class GetFeriadosUseCase {
 
     constructor(){
 
     }
 
-    async gerarListaFeriado(anos: Array<string>, estado: string): Promise<Array<string>> {
+    async gerarListaFeriado(anos: Array<string>, estado: string): Promise<Array<FeriadoDTO>> {
     
         const apiFeriados = `https://api.invertexto.com/v1/holidays/${anos[0]}?token=${TOKEN}&state=${estado}`
         const response = await fetch(apiFeriados)
@@ -21,28 +26,30 @@ export class GetFeriadosUseCase {
             dado = dado.concat(dadoAnoFim);
         } 
     
-        var datas = dado.map((el: { date: any }) => el.date)
+        var feriados = dado.map((el: { name: string, date: string  }) => {
+            return {date: el.date, feriado: el.name}
+        })
     
-        return datas
+        return feriados
         
     }
 
-    filtrarFeriados(dataInicio:string, dataFim:string, feriados:Array<string>): string[]{
+    filtrarFeriados(dataInicio:string, dataFim:string, feriados:Array<object>): object[]{
         var dataInicioArray = dataInicio.split('-')
         var dataFimArray = dataFim.split('-')
 
-        var feriadosFiltradosInicio = feriados.filter((el) => {
-            var mesFeriado = parseInt(el.split('-')[1])
-            var diaFeriado = parseInt(el.split('-')[2])
+        var feriadosFiltradosInicio = feriados.filter((el: any) => {
+            var mesFeriado = parseInt(el.date.split('-')[1])
+            var diaFeriado = parseInt(el.date.split('-')[2])
 
             var mesmoMesDiaMaior = parseInt(dataInicioArray[1]) == mesFeriado && parseInt(dataInicioArray[2]) < diaFeriado
 
             return parseInt(dataInicioArray[1]) < mesFeriado || mesmoMesDiaMaior
         })
 
-        var feriadosFiltradosFim = feriadosFiltradosInicio.filter((el) => {
-            var mesFeriado = parseInt(el.split('-')[1])
-            var diaFeriado = parseInt(el.split('-')[2])
+        var feriadosFiltradosFim = feriadosFiltradosInicio.filter((el: any) => {
+            var mesFeriado = parseInt(el.date.split('-')[1])
+            var diaFeriado = parseInt(el.date.split('-')[2])
 
             var mesmoMesDiaMenor = parseInt(dataFimArray[1]) == mesFeriado && parseInt(dataFimArray[2]) > diaFeriado
 
@@ -53,17 +60,17 @@ export class GetFeriadosUseCase {
         
     }
 
-    filtrarDiaSemana(feriados:Array<string>){
+    filtrarDiaSemana(feriados:Array<object>){
 
         var periodo:Array<Object> = [];
     
-        feriados.forEach((el) => {
-            let data = el.split('-');
+        feriados.forEach((el: any) => {
+            let data = el.date.split('-');
     
             let diaMoment = moment().set({'year': +data[0], 'month': +data[1]-1, 'date': +data[2]});
             let diaSemana = moment(diaMoment).day();
             if(diaSemana > 0 && diaSemana < 6){
-                let objDia = {data: diaMoment, diaSemana:diaSemana};
+                let objDia = {data: diaMoment, diaSemana:diaSemana, feriado: el.feriado};
                 periodo.push(objDia)
             }
         })
@@ -76,11 +83,19 @@ export class GetFeriadosUseCase {
         var periodoIdeal:Array<Object> = [];
     
         periodoDiaSemana.forEach((el: any) => {
-            var diaMoment = el.data;
+            const diaMoment = el.data.clone() //dia do feriado
             var inicioFerias = diaMoment.subtract(qtdDias, 'days');
             let diaSemana = moment(inicioFerias).day();
             if(diaSemana > 0 && diaSemana < 6){
-                let objDia = {diaInicio: inicioFerias, diaSemana: diaSemana};
+                inicioFerias = inicioFerias.format('DD/MM/YYYY')
+                let qtdDiasExtras = calcularQtdDias(el.data)
+                let totalDias = +qtdDias + +qtdDiasExtras;
+                var voltaFerias = diaMoment.add(totalDias, 'days');
+                let diaSemanaFim = moment(voltaFerias).day();
+                voltaFerias = voltaFerias.format('DD/MM/YYYY')
+                let objDia = {qtdDias: totalDias, feriado: el.feriado,
+                     diaInicio: inicioFerias, diaSemanaInicio: diaSemana,
+                     diaFim: voltaFerias, diaSemanaFim};
                 periodoIdeal.push(objDia)
             }
     
@@ -102,5 +117,15 @@ export class GetFeriadosUseCase {
         return periodosIdeais.sort(this.compararDiaSemana);
         
     }
+}
+
+function calcularQtdDias(diaFeriado: any) :Number{
+    var diaSemana = moment(diaFeriado).day()
+
+    if(diaSemana == 5){
+        return 3
+    }
+
+    return 1
 }
 

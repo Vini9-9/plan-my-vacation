@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import { GetFeriadosController } from './useCases/GetFeriados/GetFeriadosController';
+import moment from "moment";
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 });
 
 app.listen(3000, () => {
+    //console.log(moment.now().toLocaleString())
     console.log("Server is running")
 })
 
