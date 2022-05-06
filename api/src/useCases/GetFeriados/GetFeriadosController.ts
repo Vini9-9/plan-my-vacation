@@ -48,7 +48,6 @@ export class GetFeriadosController {
         })
 
         const feriadosFiltrados = getFeriadosUseCase.filtrarFeriados(dataInicio, dataFim, feriadosObj)
-        console.log('feriadosFiltrados', feriadosFiltrados)
 
         const periodoDiaSemana = getFeriadosUseCase.filtrarDiaSemana(feriadosFiltrados) 
         
@@ -58,7 +57,6 @@ export class GetFeriadosController {
 
         return response.status(200).json({
             "status": "OK",
-            // "feriados": feriadosObj,
             "periodosIdeias": periodosOrdenados
         })
     }

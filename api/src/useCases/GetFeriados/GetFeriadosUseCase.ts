@@ -2,11 +2,6 @@ import TOKEN from '../../token'
 import fetch from 'node-fetch'
 import moment from 'moment'
 
-interface FeriadoDTO {
-    date: string;
-    feriado: string;
-}
-
 interface FeriadoObj {
     date: string;
     name: string;
@@ -20,22 +15,17 @@ export class GetFeriadosUseCase {
 
     }
 
-    async gerarListaFeriado(anos: number[], estado: string): Promise<Array<FeriadoDTO>> {
+    async gerarListaFeriado(anos: number[], estado: string): Promise<Array<FeriadoObj>> {
         var dadosAnos: FeriadoObj[]= [];
 
         for (const ano of anos) {
-            console.log('ano', ano)
             const apiFeriados = `https://api.invertexto.com/v1/holidays/${ano}?token=${TOKEN}&state=${estado}`
             const response = await fetch(apiFeriados)
             var dadoAno = await response.json();
             dadosAnos = dadosAnos.concat(dadoAno);
         }
 
-        var feriados = dadosAnos.map((el) => {
-            return {date: el.date, feriado: el.name}
-        })
-    
-        return feriados
+        return dadosAnos
         
     }
 
@@ -60,7 +50,15 @@ export class GetFeriadosUseCase {
             let diaMoment = moment(el.date, 'YYYY-MM-DD');
             let diaSemana = moment(diaMoment).day();
             if(ehDiaDeSemana(diaSemana)){
-                let objDia = {data: diaMoment, diaSemana:diaSemana, feriado: el.feriado};
+                let objDia = {
+                    data: diaMoment,
+                    diaSemana:diaSemana, 
+                    feriado: {
+                        nome: el.name,
+                        tipo: el.type,
+                        nivel: el.level
+                    }
+                };
                 periodo.push(objDia)
             }
         })
@@ -87,9 +85,12 @@ export class GetFeriadosUseCase {
 
                 voltaFerias = voltaFerias.format('DD/MM/YYYY')
 
-                let objDia = {qtdDias: totalDias, feriado: el.feriado,
-                     diaInicio: inicioFerias, diaSemanaInicio: diaSemanaToText(diaSemana),
-                     diaFim: voltaFerias, diaSemanaFim};
+                let objDia = {
+                    qtdDias: totalDias, 
+                    diaInicio: inicioFerias, diaSemanaInicio: diaSemanaToText(diaSemana),
+                    diaFim: voltaFerias, diaSemanaFim,
+                    feriado: el.feriado
+                };
 
                 periodoIdeal.push(objDia)
             }

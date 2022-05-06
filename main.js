@@ -69,14 +69,18 @@ function generateSuggestedPeriods(resultJSON) {
 
     for (var i = 0; i < resultJSON.length; i++) {
 
+        dadosFeriado = resultJSON[i].feriado
+        
         let qtdDias = `<th scope="row"> ${resultJSON[i].qtdDias} </th>`;
-        let feriado = `<td> ${resultJSON[i].feriado} </td>`;
+        let nomeFeriado = `<td> ${dadosFeriado.nome} </td>`;
+        let tipoFeriado = `<td> ${dadosFeriado.tipo} (${dadosFeriado.nivel}) </td>`;
         let diaInicio = `<td> ${resultJSON[i].diaInicio} (${resultJSON[i].diaSemanaInicio})</td>`;
         let diaFim = `<td scope="row"> ${resultJSON[i].diaFim} (${resultJSON[i].diaSemanaFim})</td>`;
         let tableRow =`
-        <tr> 
+        <tr class=${dadosFeriado.tipo == 'facultativo' ? 'table-warning' : ''}> 
             ${qtdDias}  
-            ${feriado}  
+            ${nomeFeriado}  
+            ${tipoFeriado}  
             ${diaInicio}  
             ${diaFim}  
         </tr>`;
