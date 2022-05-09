@@ -92,6 +92,10 @@ function generateSuggestedPeriods(resultJSON) {
 
 };
 
+function generateNoResults() {
+    $("#resultados").html(`<b>Nenhum resultado encontrado :(</b>`);
+}
+
 function enviarDados() {
 
     const qtdDias = $("#qtd-dias").val()
@@ -118,9 +122,7 @@ function enviarDados() {
     xhr.send(dataJson)
     xhr.onload = function () {
         var resultJSON = JSON.parse(this.responseText)
-        console.log(resultJSON)
-        console.log(resultJSON.periodosIdeias)
-        generateSuggestedPeriods(resultJSON.periodosIdeias)
+        resultJSON.periodosIdeias.length ? generateSuggestedPeriods(resultJSON.periodosIdeias) : generateNoResults()
     }
 
 }

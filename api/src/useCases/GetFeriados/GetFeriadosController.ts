@@ -51,7 +51,7 @@ export class GetFeriadosController {
 
         const periodoDiaSemana = getFeriadosUseCase.filtrarDiaSemana(feriadosFiltrados) 
         
-        const periodosIdeais = getFeriadosUseCase.calcularPerido(periodoDiaSemana, qtdDias) 
+        const periodosIdeais = getFeriadosUseCase.calcularPerido(periodoDiaSemana, qtdDias, feriadosFiltrados) 
 
         const periodosOrdenados = getFeriadosUseCase.ordenarPeriodos(periodosIdeais)
 

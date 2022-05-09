@@ -1,6 +1,6 @@
 import TOKEN from '../../token'
 import fetch from 'node-fetch'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 
 interface FeriadoObj {
     date: string;
@@ -66,7 +66,7 @@ export class GetFeriadosUseCase {
         return periodo;
     }
 
-    calcularPerido(periodoDiaSemana:Array<Object>, qtdDias:Number) {
+    calcularPerido(periodoDiaSemana:Array<Object>, qtdDias:Number, feriadosFiltrados:Array<Object>) {
     
         var periodoIdeal:Array<Object> = [];
     
@@ -76,10 +76,17 @@ export class GetFeriadosUseCase {
             let diaSemana = moment(inicioFerias).day();
 
             if(ehDiaDeSemana(diaSemana)){
+                let diasExtrasFeriado = 0;
+                if(ehFeriado(inicioFerias, feriadosFiltrados)){
+                    console.log('eh feriado')
+                    console.log('diaSemana:', diaSemanaToText(diaSemana))
+                    diaSemana == 1 ? diasExtrasFeriado = 3 : diasExtrasFeriado = 1; 
+                }
+                
                 inicioFerias = inicioFerias.format('DD/MM/YYYY')
 
                 let qtdDiasExtras = calcularQtdDias(el.data)
-                let totalDias = +qtdDias + +qtdDiasExtras;
+                let totalDias = +qtdDias + +qtdDiasExtras + diasExtrasFeriado;
                 var voltaFerias = diaMoment.add(totalDias, 'days');
                 let diaSemanaFim = diaSemanaToText(moment(voltaFerias).day());
 
@@ -137,5 +144,11 @@ function diaSemanaToText(diaSemana: number) :string{
 
 function ehDiaDeSemana(diaSemana:number) {
     return diaSemana > 0 && diaSemana < 6
+}
+function ehFeriado(inicioFerias: Moment, feriadosFiltrados: Array<Object>) {
+    const dataFormatada = inicioFerias.format('YYYY-MM-DD')
+    return feriadosFiltrados.find((el) => {
+        return el.date == dataFormatada
+    })
 }
 
