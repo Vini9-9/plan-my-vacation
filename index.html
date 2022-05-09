@@ -23,6 +23,7 @@
             <h3>Instruções:</h3>
             <p>Informe a <b>quantidade de dias</b> que deseje tirar de férias.</p>
             <p>Informe também o <b>período</b> que pensa em tirar as férias.</p>
+            <p>E por último o <b>estado</b> que sua empresa está localizada.</p>
         </div>
 
         <div class="form-container">
@@ -42,18 +43,18 @@
                 </div>
             </div>
 
-            <!--         <div class="localidade">
-            <label>Estado:</label>
-            <select name="estado" id="estado-sigla"></select>
-            <label>Cidade:</label>
-            <select name="cidade" id="cidade-nome"></select>
-        </div> -->
+            <div class="localidade">
+                <label>Estado:</label>
+                <select name="estado" id="estado-sigla"></select>
+                <!--             <label>Cidade:</label>
+            <select name="cidade" id="cidade-nome"></select> -->
+            </div>
 
-        <input type="submit" value="Listar" class="btn btn-primary" onclick="enviarDados()">
-    </div>
+            <input type="submit" value="Listar" class="btn btn-primary" onclick="enviarDados()">
+        </div>
 
         <div class="container-resultados">
-            <h2>Lista de períodos sugeridos</h2>
+            <h2>Lista de períodos sugeridos <b id="sigla-estado"></b></h2>
             <table class="table table-hover bg-white">
                 <thead>
                     <tr>

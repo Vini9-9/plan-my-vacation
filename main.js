@@ -4,7 +4,7 @@ async function loadData() {
     const resEstados = await fetch(apiEstados).then((data) => data.json())
     listStates(resEstados)
 
-    $("select[name='estado']").change(async function () {
+/*     $("select[name='estado']").change(async function () {
         var estadoSelecionado = $(this).find("option:selected").attr('data-id')
 
         if (estadoSelecionado) {
@@ -17,7 +17,7 @@ async function loadData() {
             $("select[name='cidade']").html('<option value="">–  –</option>');
  
         }
-    });
+    }); */
 
 }
 
@@ -102,14 +102,14 @@ function enviarDados() {
     const dataInicio = $("#data-inicio").val()
     const dataFim = $("#data-fim").val()
     const estado = $("#estado-sigla").val()
-    const cidade = $("#cidade-nome").val()
+    //const cidade = $("#cidade-nome").val()
 
     const dadosJson =  {
         "qtdDias": qtdDias,
         "dataInicio": dataInicio,
         "dataFim": dataFim,
         "estado" : estado,
-        "cidade": cidade
+        //"cidade": cidade
     }
 
     dataJson = JSON.stringify(dadosJson)
@@ -122,6 +122,7 @@ function enviarDados() {
     xhr.send(dataJson)
     xhr.onload = function () {
         var resultJSON = JSON.parse(this.responseText)
+        document.getElementById('sigla-estado').innerHTML = estado
         resultJSON.periodosIdeias.length ? generateSuggestedPeriods(resultJSON.periodosIdeias) : generateNoResults()
     }
 

@@ -3,7 +3,7 @@ body {
     /* background-image: url('assets/notes.jpg'); */
     background-image: url('assets/yellow.jpg');
     background-repeat: no-repeat;
-    background-attachment: fixed;  
+    /* background-attachment: fixed;   */
     background-size: cover;
 }
 
@@ -49,4 +49,11 @@ body {
 .info-container {
     display: flex;
     flex-direction: column;
+}
+
+.localidade {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
 }
