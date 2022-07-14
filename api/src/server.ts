@@ -1,7 +1,6 @@
 import express from "express"
 import cors from "cors"
 import { GetFeriadosController } from './useCases/GetFeriados/GetFeriadosController';
-import moment from "moment";
 
 const app = express()
 

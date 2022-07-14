@@ -1,6 +1,8 @@
-import TOKEN from '../../token'
 import fetch from 'node-fetch'
 import moment, { Moment } from 'moment'
+import 'dotenv/config';
+
+const TOKEN = process.env.TOKEN;
 
 interface FeriadoObj {
     date: string;
