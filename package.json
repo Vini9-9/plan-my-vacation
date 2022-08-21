@@ -5,10 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --transpile-only src/server.ts",
     "test": "karma start",
     "heroku-prebuild": "npm install --dev",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "start": "ts-node-dev --transpile-only src/server.ts"
   },
   "keywords": [],
   "author": "",
