@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --transpile-only api/src/server.ts",
+    "start": "ts-node-dev --transpile-only src/server.ts",
     "test": "karma start",
     "build": "webpack"
   },
