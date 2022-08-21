@@ -12,7 +12,7 @@ Sistema de listagem de períodos ideias para tirar férias do trabalho.
 * Verificar que o Docker está rodando; 
 * Acessar a raiz do projeto;
 * Rodar o comando `docker-compose up --build` no terminal;
-* acessar a url `localhost:81`;
+* acessar a url `localhost:80`;
 
 ## Funcionalidades
 
