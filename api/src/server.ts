@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import { GetFeriadosController } from './useCases/GetFeriados/GetFeriadosController';
 
+const port = process.env.PORT || 3000;
 const app = express()
 
 app.use(express.urlencoded({extended: true}))
@@ -20,7 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(port, () => {
     //console.log(moment.now().toLocaleString())
     console.log("Server is running")
 })
