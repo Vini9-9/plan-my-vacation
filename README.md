@@ -9,6 +9,8 @@ Sistema de listagem de períodos ideias para tirar férias do trabalho.
 ## Como rodar:
 * Renomear o arquivo `.env.example` para `.env`;
 * Associar seu token a chave TOKEN nesse mesmo arquivo; 
+* Verificar que o Docker está rodando; 
+* Acessar a raiz do projeto;
 * Rodar o comando `docker-compose up --build` no terminal;
 * acessar a url `localhost:81`;
 
