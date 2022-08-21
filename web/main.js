@@ -117,7 +117,7 @@ function enviarDados() {
 
     const xhr = new XMLHttpRequest()
 
-    xhr.open("POST", "http://localhost:3333/feriados")
+    xhr.open("POST", "https://api-plan-my-vacation.herokuapp.com/feriados")
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.send(dataJson)
     xhr.onload = function () {
