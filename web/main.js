@@ -87,7 +87,8 @@ function generateSuggestedPeriods(resultJSON) {
 
         resultTable += tableRow;
     }
-
+    
+    hideLoading();
     $("#resultados").html(resultTable);
 
 };
