@@ -1,11 +1,12 @@
 function hideLoading(){
-    console.log('hideLoading')
+    var button = $('#btn-listar');
+    button.attr('aria-pressed', "false");
+    button.removeAttr('disabled');
+    button.removeClass('disabled');
+    button.html('Listar')
 }
 
 $('#btn-listar').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 8000);
+    const $this = $(this);
+    $this.button('loading');
 });
