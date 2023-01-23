@@ -1,9 +1,12 @@
 import express from "express"
 import cors from "cors"
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger';
 import { GetFeriadosController } from './useCases/GetFeriados/GetFeriadosController';
 
 const app = express()
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
@@ -27,5 +30,17 @@ app.listen(3000, () => {
 
 
 const getFeriadosController = new GetFeriadosController();
-
- app.post('/feriados', getFeriadosController.handle);
+/**
+* @swagger
+* /feriados:
+*   post:
+*     description: Returna a lista de feriados possíveis de emenda dentro do período informado
+*     responses:
+*       200:
+*         description: Um array de Feriados
+*         schema:
+*           type: array
+*           items:
+*             $ref: '#/definitions/User'
+*/
+app.post('/feriados', getFeriadosController.handle);
