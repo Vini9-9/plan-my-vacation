@@ -3,11 +3,12 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "ts-node-dev --transpile-only src/server.ts",
     "test": "karma start",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "swagger-autogen": "node src/swagger.js"
   },
   "keywords": [],
   "author": "",
@@ -37,6 +38,7 @@
     "fs": "^0.0.1-security",
     "moment": "^2.29.2",
     "node-fetch": "2.0",
+    "swagger-autogen": "^2.22.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.0"
   }

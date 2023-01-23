@@ -1,0 +1,60 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Plan my vacation API",
+    "description": "Sistema de listagem de períodos ideias para tirar férias do trabalho."
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/feriados": {
+      "post": {
+        "description": "Retorna a lista de feriados possíveis de emenda dentro do período informado",
+        "parameters": [
+          {
+            "name": "Modelo da request",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/modeloRequest"
+            }
+          }
+        ],
+        "responses": {}
+      }
+    }
+  },
+  "definitions": {
+    "modeloRequest":{
+      "type": "object",
+      "properties": {
+        "dataInicio": {
+          "type": "string",
+          "example": "YYYY-MM-DD"
+        },
+        "dataFim": {
+          "type": "string",
+          "example": "YYYY-MM-DD"
+        },
+        "estado": {
+          "type": "string",
+          "example": "SP"
+        },
+        "cidade": {
+          "type": "string",
+          "example": "Santo andré",
+          "required": false
+        },
+        "qtdDias": {
+          "type": "string",
+          "example": "10"
+        }
+      }
+    }
+  }
+}
